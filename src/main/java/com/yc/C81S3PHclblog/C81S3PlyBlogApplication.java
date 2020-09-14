@@ -1,4 +1,4 @@
-package com.yc.C81S3Plyblog;
+package com.yc.C81S3PHclblog;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

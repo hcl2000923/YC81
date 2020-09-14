@@ -1,4 +1,4 @@
-package com.yc.C81S3Plyblog.web;
+package com.yc.C81S3PHclblog.web;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.yc.C81S3Plyblog.bean.Article;
-import com.yc.C81S3Plyblog.dao.ArticleMapper;
+import com.yc.C81S3PHclblog.bean.Article;
+import com.yc.C81S3PHclblog.dao.ArticleMapper;
 
 // @RestController  ==> 所有的方法默认返回 json 数据
 @Controller // ==> 所有的方法默认返回一个视图的名称(字符串)

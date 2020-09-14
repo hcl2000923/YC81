@@ -1,10 +1,10 @@
-package com.yc.C81S3Plyblog.dao;
+package com.yc.C81S3PHclblog.dao;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Select;
 
-import com.yc.C81S3Plyblog.bean.Category;
+import com.yc.C81S3PHclblog.bean.Category;
 
 /**
  * 注解(简单sql) + XML(复杂SQL) 配置映射

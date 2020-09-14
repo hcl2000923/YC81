@@ -1,4 +1,4 @@
-package com.yc.C81S3Plyblog.bean;
+package com.yc.C81S3PHclblog.bean;
 
 import java.sql.Timestamp;
 
