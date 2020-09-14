@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan("com.yc.C81S3Plyblog.dao")
-public class C81S3PlyBlogApplication {
+public class C81S3PHclBlogApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(C81S3PlyBlogApplication.class, args);
+		SpringApplication.run(C81S3PHclBlogApplication.class, args);
 	}
 
 }
