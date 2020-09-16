@@ -43,9 +43,15 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>1.2.13</version>
+		</dependency>
+
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.47</version><!--$NO-MVN-MAN-VER$-->
+			<version>5.1.47</version><!--$NO-MVN-MAN-VER$ -->
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

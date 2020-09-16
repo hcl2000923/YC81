@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.yc.C81S3Plyblog.dao")
+@MapperScan("com.yc.C81S3PHclblog.dao")
 public class C81S3PHclBlogApplication {
 
 	public static void main(String[] args) {
