@@ -16,6 +16,8 @@
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/nprogress.js"></script>
 <script src="js/jquery.lazyload.min.js"></script>
+<script src="js/vue.min.js"></script>
+<script src="js/axios.min.js"></script>
 <!--[if gte IE 9]>
   <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
   <script src="js/html5shiv.min.js" type="text/javascript"></script>
@@ -44,7 +46,12 @@
             </ul>
           </li>
         </ul>
-        <a data-toggle="modal" data-target="#loginModal" class="login" rel="nofollow">Hi,请登录</a>&nbsp;&nbsp;<a href="javascript:;" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;<a href="" rel="nofollow">找回密码</a> </div>
+        <a th:if="${session.loginedUser==null}" id="loginBtn" data-toggle="modal" data-target="#loginModal" class="login" rel="nofollow">Hi,请登录</a>&nbsp;&nbsp;
+        <a th:if="${session.loginedUser!=null}" class="login" rel="nofollow"th:text="'欢迎 ' + ${session.loginedUser.name}">欢迎xxxx</a>&nbsp;&nbsp;
+        <a href="toreg" class="register" rel="nofollow">我要注册</a>&nbsp;&nbsp;
+        <a href="" rel="nofollow">找回密码</a> 
+        <a href="toAddArticle" rel="nofollow">发表文章</a>
+        </div>
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar" aria-expanded="false"> <span class="sr-only"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
         <h1 class="logo hvr-bounce-in"><a href="" title=""><img src="images/logo.png" alt=""></a></h1>
@@ -52,7 +59,7 @@
       <div class="collapse navbar-collapse" id="header-navbar">
         <ul class="nav navbar-nav navbar-right">
           <li class="hidden-index active"><a data-cont="异清轩首页" href="index.html">异清轩首页</a></li>
-      	  <li th:each="c : ${categorys}"><a href="category.html" th:text="${c.name}">前端技术</a></li>
+          <li th:each="c : ${categorys}"><a href="category.html" th:text="${c.name}">前端技术</a></li>
         </ul>
         <form class="navbar-form visible-xs" action="/Search" method="post">
           <div class="input-group">
@@ -82,8 +89,8 @@
           <div class="item active"> <a href="" target="_blank"><img src="images/banner/banner_01.jpg" alt="" class="img-responsive"></a> 
             <!--<div class="carousel-caption"> </div>--> 
           </div>
-          <div class="item"> <a href="" target="_blank"><img src="images/banner/banner_02.jpg" alt="" class="img-responsive"></a> 
-            <!--<div class="carousel-caption"> </div>--> 
+          <div class="item"> <a href="" target="_blank"><img src="images/banner/banner_02.jpg" alt="" class="img-responsive"></a>
+							<!--<div class="carousel-caption"> </div>--> 
           </div>
           <div class="item"> <a href="" target="_blank"><img src="images/banner/banner_03.jpg" alt="" class="img-responsive"></a> 
             <!--<div class="carousel-caption"> </div>--> 
@@ -99,7 +106,7 @@
         <div class="more"><a href="">PHP</a><a href="">JavaScript</a><a href="">EmpireCMS</a><a href="">Apache</a><a href="">MySQL</a></div>
       </div>
       <article th:each="a : ${newArticles}" class="excerpt excerpt-2"><a class="focus" href="article.html" title=""><img class="thumb" data-original="images/excerpt.jpg" src="images/excerpt.jpg" alt=""></a>
-			 <header><a class="cat" href="program" th:text="${a.category.name}">后端程序<i></i></a>
+        <header><a class="cat" href="program" th:text="${a.category.name}">后端程序<i></i></a>
           <h2><a th:href="   'article.html?id='  + ${a.id}  " title="" th:text="${a.title}">php如何判断一个日期的格式是否正确</a></h2>
         </header>
         <p class="meta">
@@ -107,6 +114,7 @@
           <span class="views"><i class="glyphicon glyphicon-eye-open"></i> 共<span th:text="${a.readcnt}">120</span>人围观</span> <a class="comment" href="article.html#comment"><i class="glyphicon glyphicon-comment"></i> 0个不明物体</a></p>
         <p class="note" th:text="${a.content.substring(0,50)}">可以用strtotime()把日期（$date）转成时间戳，再用date()按需要验证的格式转成一个日期，来跟$date比较是否相同来验证这个日期的格式是否是正确的。所以要验证日期格式 ... </p>
       </article>
+      
       <div id="pagination">
 			<a href="?" class="next">next</a>
 	  </div>
@@ -212,7 +220,7 @@
 <!--登录注册模态框-->
 <div class="modal fade user-select" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content" id="loginform">
       <form action="/Admin/Index/login" method="post">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -220,20 +228,67 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="loginModalUserNmae">用户名</label>
-            <input type="text" class="form-control" id="loginModalUserNmae" placeholder="请输入用户名" autofocus maxlength="15" autocomplete="off" required>
+            <label for="loginModalUserNmae">用户名
+            	<span v-text="msg.account"></span>
+            </label>
+            <input v-model="user.account" type="text" class="form-control" id="loginModalUserNmae" placeholder="请输入用户名" autofocus maxlength="15" autocomplete="off" required>
           </div>
           <div class="form-group">
-            <label for="loginModalUserPwd">密码</label>
-            <input type="password" class="form-control" id="loginModalUserPwd" placeholder="请输入密码" maxlength="18" autocomplete="off" required>
+            <label for="loginModalUserPwd">密码
+            	<span v-text="msg.pwd"></span>
+            </label>
+            <input v-model="user.pwd" type="password" class="form-control" id="loginModalUserPwd" placeholder="请输入密码" maxlength="18" autocomplete="off" required>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="submit" class="btn btn-primary">登录</button>
+          <button @click="login" type="button" class="btn btn-primary">登录</button>
         </div>
       </form>
-    </div>
+      </div>
+      <script type="text/javascript">
+      	var vue = new Vue({
+		el : "#loginform",
+			data : {
+				user : {
+					account : null,
+					pwd : null
+				},
+				msg : {
+					account : null,
+					pwd : null
+				}
+			},
+			methods : {
+				login(){
+					axios.get("login",{params:this.user}).then( res => {
+						// res.data => Result
+						if(res.data.code == 0){
+							// 遍历msg 对象所有属性
+							for( name in this.msg){
+								// 遍历报错信息数组
+								for(var i=0; i<res.data.data.length; i++){
+									if(name==res.data.data[i].field){
+										// 将报错信息赋值给 msg对应属性
+										this.msg[name] = res.data.data[i].defaultMessage;
+										break;
+									}
+								}
+							}
+						} else {
+							// 关闭模态窗口
+							$('#loginModal').modal("hide");
+							// 修改登录超链接
+							loginBtn.innerText = "欢迎: " + this.user.account;
+							// 重置按钮
+							loginModal.id="清空模态窗口的id， 让按钮找不到窗口";
+						}
+					});
+				}
+			}
+		});
+	</script>
+    
   </div>
 </div>
 <!--右键菜单列表-->
@@ -249,5 +304,12 @@
 <script src="js/bootstrap.min.js"></script> 
 <script src="js/jquery.ias.js"></script> 
 <script src="js/scripts.js"></script>
+<script type="text/javascript" th:if="${param.login!=null}">
+// jquery 加载函数 : 在所有页面元素(js)加载完成之后再执行
+$(function(){
+	$('#loginModal').modal("show");
+})
+
+</script>
 </body>
 </html>

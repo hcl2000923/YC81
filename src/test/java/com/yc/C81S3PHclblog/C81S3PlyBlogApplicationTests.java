@@ -46,7 +46,7 @@ class C81S3PlyBlogApplicationTests {
 			Assert.isNull(dbuser, "dbuser必须为空");
 		} catch (BizException e) {
 			e.printStackTrace();
-			Assert.hasText(e.getMessage(), "用户名或密码错误");
+			Assert.hasText(e.getMessage(), "用户名或密码错误！！！");
 		}
 
 	}
